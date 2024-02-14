@@ -1,8 +1,10 @@
-FROM node:14 as base
+FROM node:18 as base
 
 WORKDIR /src
 
 COPY package*.json ./
+
+COPY prisma ./prisma/
 
 RUN npm i
 

@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Source {
+  id            String         @id @default(uuid())
+  name          String
+  url           String         @unique
+  events        Event[]
+  subscriptions Subscription[]
+}
+
+model Endpoint {
+  id            String         @id @default(uuid())
+  url           String         @unique
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id        String     @id @default(uuid())
+  Source    Source     @relation(fields: [sourceId], references: [id])
+  sourceId  String
+  endpoints Endpoint[]
+}
+
+model Event {
+  id       String      @id @default(uuid())
+  Source   Source      @relation(fields: [sourceId], references: [id])
+  sourceId String
+  payload  Json
+  headers  Json
+  status   EventStatus @default(RECEIVED)
+}
+
+enum EventStatus {
+  RECEIVED
+  FORWARDED
+  RETRIED
+  FAILED
+}

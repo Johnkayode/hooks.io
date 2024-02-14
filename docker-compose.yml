@@ -4,18 +4,36 @@ services:
     image: 'redis:alpine'
     ports:
       - '6379:6379'
+    container_name: redis
+  postgres:
+    image: 'postgres'
+    environment:
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$DB_NAME
+    ports:
+      - 5432:$DB_PORT
+    container_name: postgres
+    volumes:
+      - postgres:/var/lib/postgres
   app:
     restart: on-failure
     build:
       context: .
       dockerfile: Dockerfile
       target: base
+    depends_on:
+      - redis
+      - postgres
     volumes:
       - ./app:/src/app
       - ./nodemon.json:/src/nodemon.json
     container_name: app
     expose:
-      - '5000'
+      - '${APP_PORT:-5000}'
     ports:
-      - '5000:5000'
+      - '${APP_PORT:-5000}:${APP_PORT:-5000}'
     command: npm run dev
+
+volumes: 
+  postgres:
