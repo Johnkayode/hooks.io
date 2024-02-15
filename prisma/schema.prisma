@@ -9,11 +9,10 @@ datasource db {
 }
 
 model Source {
-  id            String         @id @default(uuid())
-  name          String
-  url           String         @unique
-  events        Event[]
-  subscriptions Subscription[]
+  id           String        @id @default(uuid())
+  name         String
+  events       Event[]?
+  Subscription Subscription?
 }
 
 model Endpoint {
@@ -25,7 +24,7 @@ model Endpoint {
 model Subscription {
   id        String     @id @default(uuid())
   Source    Source     @relation(fields: [sourceId], references: [id])
-  sourceId  String
+  sourceId  String     @unique
   endpoints Endpoint[]
 }
 
