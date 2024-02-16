@@ -1,5 +1,6 @@
 import { Router } from "express";
 import IngestService from "./ingest.service";
+import { CreateSourceValidator, CreateUpdateEndpointValidator, SubscribeEndpointValidator } from "./ingest.validators";
 import { APIError } from "../../common";
 
 const ingestRouter = Router();
@@ -21,7 +22,7 @@ ingestRouter.get('/source', async (req, res, next) => {
     }
 });
 
-ingestRouter.post('/source', async (req, res, next) => {
+ingestRouter.post('/source', CreateSourceValidator, async (req, res, next) => {
     try {
         const source = await IngestService.createSource(req.body);
         res.status(201).json({
@@ -63,7 +64,7 @@ ingestRouter.get('/endpoint', async (req, res, next) => {
     }
 });
 
-ingestRouter.post('/endpoint', async (req, res, next) => {
+ingestRouter.post('/endpoint', CreateUpdateEndpointValidator, async (req, res, next) => {
     try {
         const endpoint = await IngestService.createEndpoint(req.body);
         res.status(201).json({
@@ -91,7 +92,7 @@ ingestRouter.get('/endpoint/:id', async (req, res, next) => {
     }
 });
 
-ingestRouter.post('/endpoint/:id/subscribe', async (req, res, next) => {
+ingestRouter.post('/endpoint/:id/subscribe', SubscribeEndpointValidator, async (req, res, next) => {
     try {
         const subscription = await IngestService.subscribeEndpoint(req.body.sourceId, req.params.id);
         res.status(201).json({
@@ -105,7 +106,7 @@ ingestRouter.post('/endpoint/:id/subscribe', async (req, res, next) => {
     }
 });
 
-ingestRouter.post('/endpoint/:id/unsubscribe', async (req, res, next) => {
+ingestRouter.post('/endpoint/:id/unsubscribe', SubscribeEndpointValidator, async (req, res, next) => {
     try {
         await IngestService.unsubscribeEndpoint(req.body.sourceId, req.params.id);
         res.status(201).json({
@@ -119,7 +120,7 @@ ingestRouter.post('/endpoint/:id/unsubscribe', async (req, res, next) => {
     }
 });
 
-ingestRouter.patch('/endpoint/:id', async (req, res, next) => {
+ingestRouter.patch('/endpoint/:id', CreateUpdateEndpointValidator, async (req, res, next) => {
     try {
         const endpoint = await IngestService.updateEndpoint(req.params.id, req.body);
         res.status(201).json({
