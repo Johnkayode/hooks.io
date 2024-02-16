@@ -1,12 +1,20 @@
+import { Source } from "@prisma/client";
 import prisma from "../../../prisma/client";
 
 
 class SourceRepository {
-    static async create(data: any): Promise<any> {
+    static async create(data: any): Promise<Source> {
         const newSource = await prisma.source.create({
           data,
         });
         return newSource;
+    }
+
+    static async getMany(data?: any): Promise<any[]> {
+        const sources = await prisma.source.findMany({
+          where: data || {},
+        });
+        return sources;
     }
 
     /**
@@ -17,6 +25,9 @@ class SourceRepository {
     static async getById(id: string): Promise<any> {
         let source = await prisma.source.findUnique({
             where: { id },
+            include: { 
+                Subscription: { select: { id:true, endpoints: true } }
+            },
         });
         
         return source;
@@ -42,6 +53,13 @@ class EndpointRepository {
         return newEndpoint;
     }
 
+    static async getMany(data?: any): Promise<any[]> {
+        const endpoints = await prisma.endpoint.findMany({
+          where: data || {},
+        });
+        return endpoints;
+    }
+
     /**
      * Fetches an endpoint by its ID.
      * @param id the endpoint ID.
@@ -50,6 +68,7 @@ class EndpointRepository {
     static async getById(id: string): Promise<any> {
         let endpoint = await prisma.endpoint.findUnique({
             where: { id },
+            include: { subscriptions: true },
         });
         return endpoint;
     }
@@ -79,62 +98,64 @@ class EndpointRepository {
     }
 }
 
-// class SubscriptionRepository {
+class SubscriptionRepository {
 
-//     static async getOrCreate(sourceId) {
-//         // let subscription;  
-//         // await prisma.$transaction( async (tx) => {
-//         //     subscription = await tx.subscription.findFirst({
-//         //         where: {
-//         //             sourceId,
-//         //         },
-//         //     })
-//         //     if (!subscription) {
-//         //         subscription = await tx.subscription.create({  
-//         //             data: {
-//         //                 sourceId
-//         //             }, 
-//         //         })
-//         //     }
-//         // })
-//         // return subscription;
+    static async getOrCreate(sourceId) {
+        let subscription;  
+
+        await prisma.$transaction( async (tx) => {
+            subscription = await tx.subscription.findFirst({
+                where: {
+                    sourceId,
+                },
+            })
+            if (!subscription) {
+                subscription = await tx.subscription.create({  
+                    data: {
+                        sourceId
+                    }, 
+                })
+            }
+        })
+        return subscription;
         
         
-//     }
+    }
 
-//     static async create(sourceId: string, endpointId: string): Promise<any> {
-//         // let subscription = await this.getOrCreate(sourceId);
-//         // if (subscription && !subscription.endpoints.includes(endpointId)) {
-//         //     subscription = await prisma.subscription.update({
-//         //         where: { id: subscription.id },
-//         //         data: {
-//         //             endpoints: {
-//         //                 connect: {
-//         //                     id: endpointId
-//         //                 }
-//         //             }
-//         //         },
-//         //     });
-//         // }
-//         const subscription = await prisma.subscription.upsert({
-//             where: {
-//                 sourceId,
-//             },
-//             create: {
-//                 Source: {
-//                     connect: { id: sourceId },
-//                 },
-//             },
-//             update: {},
-//         });
-//     }
-
-//     static async delete(sourceId: string, endpointId: string): Promise<any> {
+    static async create(sourceId: string, endpointId: string): Promise<any> {
+        let subscription = await this.getOrCreate(sourceId);
         
-//     }
+        subscription = await prisma.subscription.update({
+            where: { id: subscription.id },
+            data: {
+                endpoints: {
+                    connect: {
+                        id: endpointId
+                    }
+                }
+            },
+        });
+
+        return subscription;
+
+    }
+
+    static async delete(sourceId: string, endpointId: string): Promise<any> {
+        let subscription = await this.getOrCreate(sourceId);
+        subscription = await prisma.subscription.update({
+            where: { id: subscription.id },
+            data: {
+                endpoints: {
+                    disconnect: {
+                        id: endpointId
+                    }
+                }
+            },
+        });
+    }
 
  
-// }
+}
 
 
-export { SourceRepository, EndpointRepository }
+export { SourceRepository, EndpointRepository, SubscriptionRepository }
