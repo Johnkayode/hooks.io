@@ -1,5 +1,6 @@
 import { Router } from "express";
 import IngestService from "./ingest.service";
+import { APIError } from "../../common";
 
 const ingestRouter = Router();
 
@@ -135,13 +136,63 @@ ingestRouter.patch('/endpoint/:id', async (req, res, next) => {
 ingestRouter.post('/ingest/:id', async (req, res, next) => {
     try {
         // verify if source exists
-        console.log(req.body)
+        const sourceId = req.params.id
+        const source = await IngestService.retrieveSource(sourceId)
+       
+        if (!source) {
+            res.status(404).json(
+                new APIError({
+                    message: "Source doesn't exist.",
+                    status_code: 404
+                })
+            )
+        }
+        else {
+            const event = await IngestService.ingestEvent({
+                sourceId,
+                headers: req.headers,
+                payload: req.body
+            })
+            // add event to queue for forwarding
+            res.status(200).json({
+                success: true,
+                message: 'Event received',
+                status_code: 200,
+            });
+        }
+    } catch (error) {
+      next(error);
+    }
+});
+
+ingestRouter.get('/event', async (req, res, next) => {
+    try {
+        let data = {};
+        let sourceId = req.query.sourceId
+        if (sourceId) { data = { sourceId } }
+        const events = await IngestService.retrieveEvents(data);
         res.status(200).json({
             success: true,
-            message: 'Event retrieved',
+            message: 'Events retrieved',
             status_code: 200,
+            data: events,
         });
     } catch (error) {
       next(error);
     }
 });
+
+ingestRouter.get('/event/:id', async (req, res, next) => {
+    try {
+        const event = await IngestService.retrieveEvent(req.params.id);
+        res.status(200).json({
+            success: true,
+            message: 'Event retrieved',
+            status_code: 200,
+            data: event,
+        });
+    } catch (error) {
+      next(error);
+    }
+});
+

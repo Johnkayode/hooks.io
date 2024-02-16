@@ -1,6 +1,6 @@
-import { Endpoint, Source, Subscription } from "@prisma/client";
+import { Endpoint, Source, Subscription, Event } from "@prisma/client";
 import { APIError } from "../../common";
-import { SourceRepository, EndpointRepository, SubscriptionRepository } from "./ingest.repository";
+import { SourceRepository, EndpointRepository, SubscriptionRepository, EventRepository } from "./ingest.repository";
 
 export default class IngestService {
 
@@ -16,7 +16,7 @@ export default class IngestService {
 
     static async retrieveSource(id: string): Promise<Source> {
         let source = await SourceRepository.getById(id);
-        source.url = `/ingest/${source.id}`
+        if (source) {source.url = `/ingest/${source.id}`}
         return source;
     }
 
@@ -40,10 +40,6 @@ export default class IngestService {
         return endpoint;
     }
 
-    static async ingestEvent(data: any) {
-
-    }
-
     static async subscribeEndpoint(sourceId: string, endpointId: string): Promise<Subscription> {
         const subscription = await SubscriptionRepository.create(sourceId, endpointId);
         return subscription;
@@ -51,6 +47,22 @@ export default class IngestService {
 
     static async unsubscribeEndpoint(sourceId: string, endpointId: string): Promise<void> {
         await SubscriptionRepository.delete(sourceId, endpointId);
+    }
+
+    static async ingestEvent(data: any) {
+        const event = await EventRepository.create(data);
+        return event
+    }
+
+    static async retrieveEvents(data?: any): Promise<Event[]> {
+        // TODO: Add pagination
+        let events = await EventRepository.getMany(data || {});
+        return events;
+    }
+
+    static async retrieveEvent(id: string): Promise<Event> {
+        const event = await EventRepository.getById(id);
+        return event;
     }
 
 

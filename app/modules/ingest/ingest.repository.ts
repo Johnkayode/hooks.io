@@ -1,4 +1,4 @@
-import { Source } from "@prisma/client";
+import { Event, EventStatus, Source } from "@prisma/client";
 import prisma from "../../../prisma/client";
 
 
@@ -13,6 +13,9 @@ class SourceRepository {
     static async getMany(data?: any): Promise<any[]> {
         const sources = await prisma.source.findMany({
           where: data || {},
+          orderBy: {
+            createdAt: 'desc',
+          },
         });
         return sources;
     }
@@ -56,6 +59,9 @@ class EndpointRepository {
     static async getMany(data?: any): Promise<any[]> {
         const endpoints = await prisma.endpoint.findMany({
           where: data || {},
+          orderBy: {
+            createdAt: 'desc',
+          },
         });
         return endpoints;
     }
@@ -153,9 +159,57 @@ class SubscriptionRepository {
             },
         });
     }
-
  
 }
 
+class EventRepository {
+    static async create(data: any): Promise<Event> {
+        const newEvent = await prisma.event.create({
+          data,
+        });
+        return newEvent;
+    }
 
-export { SourceRepository, EndpointRepository, SubscriptionRepository }
+    static async getMany(data?: any): Promise<Event[]> {
+        const events = await prisma.event.findMany({
+          where: data || {},
+          include: { Source: {select: { id:true, name: true }} },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        });
+        return events;
+    }
+
+    /**
+     * Fetches an event by its ID.
+     * @param id the event ID.
+     * @returns an event or null.
+     */
+    static async getById(id: string): Promise<Event> {
+        let event = await prisma.event.findUnique({
+            where: { id },
+            include: { Source: true },
+        });
+        return event;
+    }
+
+    /**
+     * Updates an event status.
+     * @param id the endpoint ID.
+     * @param status new status.
+     * @returns an event.
+     */
+    static async update(id: string, status: EventStatus): Promise<Event> {
+        const event = await prisma.event.update({
+            where: { id },
+            data: {
+                status
+            },
+        });
+        return event;
+    }
+}
+
+
+export { SourceRepository, EndpointRepository, SubscriptionRepository, EventRepository }
