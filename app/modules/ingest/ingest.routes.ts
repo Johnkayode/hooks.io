@@ -2,6 +2,7 @@ import { Router } from "express";
 import IngestService from "./ingest.service";
 import { CreateSourceValidator, CreateUpdateEndpointValidator, SubscribeEndpointValidator } from "./ingest.validators";
 import { APIError } from "../../common";
+import { eventQueue } from "../../services/bull";
 
 const ingestRouter = Router();
 
@@ -154,7 +155,13 @@ ingestRouter.post('/ingest/:id', async (req, res, next) => {
                 headers: req.headers,
                 payload: req.body
             })
+        
             // add event to queue for forwarding
+            await eventQueue.add({
+                type: 'forward-event',
+                data: event
+            });
+
             res.status(200).json({
                 success: true,
                 message: 'Event received',

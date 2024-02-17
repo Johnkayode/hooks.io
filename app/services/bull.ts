@@ -1,8 +1,9 @@
 import * as Bull from "bull"; 
 
-const taskQueue = new Bull('taskQueue', {
+export const eventQueue = new Bull('eventQueue', {
     redis: {
       port: 6379,
-      host: 'localhost'
+      host: 'redis'
     }
 });
+

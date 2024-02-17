@@ -12,6 +12,6 @@ COPY . .
 
 FROM base as production
 
-ENV NODE_PATH=./build
+ENV NODE_PATH=./dist
 
 RUN npm run build

@@ -33,7 +33,21 @@ services:
       - '${APP_PORT:-5000}'
     ports:
       - '${APP_PORT:-5000}:${APP_PORT:-5000}'
-    command: npm run dev
+    command: npm run dev && npm run worker-dev
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - ./app:/src/app
+      - ./nodemon.json:/src/nodemon.json
+    container_name: worker
+    command: npm run worker-dev
+    restart: on-failure
 
 volumes: 
   postgres:
