@@ -10,6 +10,8 @@ RUN npm i
 
 COPY . .
 
+# RUN npm run db-migrate
+
 FROM base as production
 
 ENV NODE_PATH=./dist

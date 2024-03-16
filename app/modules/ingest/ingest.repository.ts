@@ -114,6 +114,7 @@ class SubscriptionRepository {
                 where: {
                     sourceId,
                 },
+                include: { endpoints: {select: { id:true, url: true }} }
             })
             if (!subscription) {
                 subscription = await tx.subscription.create({  
