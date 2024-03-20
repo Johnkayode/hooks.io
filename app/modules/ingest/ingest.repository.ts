@@ -1,4 +1,4 @@
-import { Event, EventStatus, Source } from "@prisma/client";
+import { Event, Source } from "@prisma/client";
 import prisma from "../../../prisma/client";
 
 
@@ -195,21 +195,6 @@ class EventRepository {
         return event;
     }
 
-    /**
-     * Updates an event status.
-     * @param id the endpoint ID.
-     * @param status new status.
-     * @returns an event.
-     */
-    static async update(id: string, status: EventStatus): Promise<Event> {
-        const event = await prisma.event.update({
-            where: { id },
-            data: {
-                status
-            },
-        });
-        return event;
-    }
 }
 
 

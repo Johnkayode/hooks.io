@@ -1,5 +1,6 @@
 import { Router } from "express";
 import IngestService from "./ingest.service";
+import ForwardService from "../forward/forward.service";
 import { CreateSourceValidator, CreateUpdateEndpointValidator, SubscribeEndpointValidator } from "./ingest.validators";
 import { APIError } from "../../common";
 import { eventQueue } from "../../services/bull";
@@ -204,3 +205,16 @@ ingestRouter.get('/event/:id', async (req, res, next) => {
     }
 });
 
+ingestRouter.get('/event/:id/deliveries', async (req, res, next) => {
+    try {
+        const eventDeliveries = await ForwardService.retrieveEventDeliveries({eventId: req.params.id});
+        res.status(200).json({
+            success: true,
+            message: 'Event deliveries retrieved',
+            status_code: 200,
+            data: eventDeliveries,
+        });
+    } catch (error) {
+      next(error);
+    }
+});
