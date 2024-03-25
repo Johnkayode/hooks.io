@@ -6,8 +6,10 @@
     "baseUrl": "./app",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
   },
-  "include": ["app/**/*.ts"],
+  "include": ["app/**/*.ts", "app/swagger.ts"],
   "exclude": ["node_modules"]
 }

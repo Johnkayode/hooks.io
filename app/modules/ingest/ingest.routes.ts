@@ -11,6 +11,8 @@ export { ingestRouter };
 
 // Source
 ingestRouter.get('/source', async (req, res, next) => {
+    // #swagger.tags = ['Source']
+    // #swagger.description = 'Retrieve all sources.' 
     try {
         const sources = await IngestService.retrieveSources();
         res.status(200).json({
@@ -25,6 +27,8 @@ ingestRouter.get('/source', async (req, res, next) => {
 });
 
 ingestRouter.post('/source', CreateSourceValidator, async (req, res, next) => {
+    // #swagger.tags = ['Source']
+    // #swagger.description = 'Create new source.' 
     try {
         const source = await IngestService.createSource(req.body);
         res.status(201).json({
@@ -39,6 +43,8 @@ ingestRouter.post('/source', CreateSourceValidator, async (req, res, next) => {
 });
 
 ingestRouter.get('/source/:id', async (req, res, next) => {
+    // #swagger.tags = ['Source']
+    // #swagger.description = 'Retrieve source by id.' 
     try {
         const source = await IngestService.retrieveSource(req.params.id);
         res.status(200).json({
@@ -54,6 +60,8 @@ ingestRouter.get('/source/:id', async (req, res, next) => {
 
 // Endpoint
 ingestRouter.get('/endpoint', async (req, res, next) => {
+    // #swagger.tags = ['Endpoint']
+    // #swagger.description = 'Retrieve all endpoints.' 
     try {
         const endpoints = await IngestService.retrieveEndpoints();
         res.status(200).json({
@@ -68,6 +76,8 @@ ingestRouter.get('/endpoint', async (req, res, next) => {
 });
 
 ingestRouter.post('/endpoint', CreateUpdateEndpointValidator, async (req, res, next) => {
+    // #swagger.tags = ['Endpoint']
+    // #swagger.description = 'Create new endpoint.' 
     try {
         const endpoint = await IngestService.createEndpoint(req.body);
         res.status(201).json({
@@ -82,6 +92,8 @@ ingestRouter.post('/endpoint', CreateUpdateEndpointValidator, async (req, res, n
 });
 
 ingestRouter.get('/endpoint/:id', async (req, res, next) => {
+    // #swagger.tags = ['Endpoint']
+    // #swagger.description = 'Retrieve endpoint by id.' 
     try {
         const endpoint = await IngestService.retrieveEndpoint(req.params.id);
         res.status(200).json({
@@ -96,6 +108,8 @@ ingestRouter.get('/endpoint/:id', async (req, res, next) => {
 });
 
 ingestRouter.post('/endpoint/:id/subscribe', SubscribeEndpointValidator, async (req, res, next) => {
+    // #swagger.tags = ['Endpoint']
+    // #swagger.description = 'Subscribe endpoint to a source.' 
     try {
         const subscription = await IngestService.subscribeEndpoint(req.body.sourceId, req.params.id);
         res.status(201).json({
@@ -110,6 +124,8 @@ ingestRouter.post('/endpoint/:id/subscribe', SubscribeEndpointValidator, async (
 });
 
 ingestRouter.post('/endpoint/:id/unsubscribe', SubscribeEndpointValidator, async (req, res, next) => {
+    // #swagger.tags = ['Endpoint']
+    // #swagger.description = 'Unsubscribe an endpoint from a source.' 
     try {
         await IngestService.unsubscribeEndpoint(req.body.sourceId, req.params.id);
         res.status(201).json({
@@ -124,6 +140,8 @@ ingestRouter.post('/endpoint/:id/unsubscribe', SubscribeEndpointValidator, async
 });
 
 ingestRouter.patch('/endpoint/:id', CreateUpdateEndpointValidator, async (req, res, next) => {
+    // #swagger.tags = ['Endpoint']
+    // #swagger.description = 'Update endpoint.' 
     try {
         const endpoint = await IngestService.updateEndpoint(req.params.id, req.body);
         res.status(201).json({
@@ -137,8 +155,11 @@ ingestRouter.patch('/endpoint/:id', CreateUpdateEndpointValidator, async (req, r
     }
 });
 
-// Ingest
+
+// Event & Event Delivery
 ingestRouter.post('/ingest/:id', async (req, res, next) => {
+    // #swagger.tags = ['Event']
+    // #swagger.description = 'Ingest event from a source.' 
     try {
         // verify if source exists
         const sourceId = req.params.id
@@ -176,8 +197,9 @@ ingestRouter.post('/ingest/:id', async (req, res, next) => {
     }
 });
 
-// Event & Event Delivery
 ingestRouter.get('/event', async (req, res, next) => {
+    // #swagger.tags = ['Event']
+    // #swagger.description = 'Retrieve all events (filter by source).' 
     try {
         let data = {};
         let sourceId = req.query.sourceId
@@ -195,6 +217,8 @@ ingestRouter.get('/event', async (req, res, next) => {
 });
 
 ingestRouter.get('/event/:id', async (req, res, next) => {
+    // #swagger.tags = ['Event']
+    // #swagger.description = 'Retrieve event by id.' 
     try {
         const event = await IngestService.retrieveEvent(req.params.id);
         res.status(200).json({
@@ -209,6 +233,8 @@ ingestRouter.get('/event/:id', async (req, res, next) => {
 });
 
 ingestRouter.get('/event/:id/deliveries', async (req, res, next) => {
+    // #swagger.tags = ['Event']
+    // #swagger.description = 'Retrieve all event deliveries.' 
     try {
         const eventDeliveries = await ForwardService.retrieveEventDeliveries({eventId: req.params.id});
         res.status(200).json({
@@ -223,6 +249,8 @@ ingestRouter.get('/event/:id/deliveries', async (req, res, next) => {
 });
 
 ingestRouter.post('/event-delivery/:id/retry', async (req, res, next) => {
+    // #swagger.tags = ['Event']
+    // #swagger.description = 'Retry an event delivery (max. 3 retries).' 
     try {
         const eventDelivery = await ForwardService.retrieveEventDelivery(req.params.id);
 

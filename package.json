@@ -8,7 +8,8 @@
     "build": "tsc -p .",
     "dev": "nodemon app/index.ts",
     "worker-dev": "nodemon app/services/worker.ts",
-    "db-migrate": "npx prisma migrate deploy"
+    "db-migrate": "npx prisma migrate deploy",
+    "swagger": "ts-node app/swagger.ts"
   },
   "author": "",
   "license": "ISC",
@@ -21,11 +22,14 @@
   },
   "dependencies": {
     "@prisma/client": "^5.9.1",
+    "@types/swagger-ui-express": "^4.1.6",
     "axios": "^1.6.8",
     "bull": "^4.12.2",
     "celebrate": "^15.0.3",
     "dotenv": "^16.4.4",
     "express": "^4.18.2",
-    "joi": "^17.12.1"
+    "joi": "^17.12.1",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.0"
   }
 }

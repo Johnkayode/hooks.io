@@ -1,4 +1,4 @@
-import * as Bull from "bull"; 
+import Bull from "bull"; 
 
 export const eventQueue = new Bull('eventQueue', {
     redis: {

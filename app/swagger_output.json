@@ -1,0 +1,339 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "v1.0.0",
+    "title": "Hooks.io",
+    "description": ""
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": ""
+    }
+  ],
+  "tags": [
+    {
+      "name": "Source",
+      "description": "Webhook sources"
+    },
+    {
+      "name": "Endpoint",
+      "description": "Endpoints to consume webhook events"
+    },
+    {
+      "name": "Event",
+      "description": "Webhook events & event delivery"
+    }
+  ],
+  "paths": {
+    "/source": {
+      "get": {
+        "tags": [
+          "Source"
+        ],
+        "description": "Retrieve all sources.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Source"
+        ],
+        "description": "Create new source.",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/source/{id}": {
+      "get": {
+        "tags": [
+          "Source"
+        ],
+        "description": "Retrieve source by id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/endpoint": {
+      "get": {
+        "tags": [
+          "Endpoint"
+        ],
+        "description": "Retrieve all endpoints.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Endpoint"
+        ],
+        "description": "Create new endpoint.",
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/endpoint/{id}": {
+      "get": {
+        "tags": [
+          "Endpoint"
+        ],
+        "description": "Retrieve endpoint by id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Endpoint"
+        ],
+        "description": "Update endpoint.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/endpoint/{id}/subscribe": {
+      "post": {
+        "tags": [
+          "Endpoint"
+        ],
+        "description": "Subscribe endpoint to a source.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "sourceId": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/endpoint/{id}/unsubscribe": {
+      "post": {
+        "tags": [
+          "Endpoint"
+        ],
+        "description": "Unsubscribe an endpoint from a source.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "sourceId": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ingest/{id}": {
+      "post": {
+        "tags": [
+          "Event"
+        ],
+        "description": "Ingest event from a source.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/event": {
+      "get": {
+        "tags": [
+          "Event"
+        ],
+        "description": "Retrieve all events (filter by source).",
+        "parameters": [
+          {
+            "name": "sourceId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/event/{id}": {
+      "get": {
+        "tags": [
+          "Event"
+        ],
+        "description": "Retrieve event by id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/event/{id}/deliveries": {
+      "get": {
+        "tags": [
+          "Event"
+        ],
+        "description": "Retrieve all event deliveries.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/event-delivery/{id}/retry": {
+      "post": {
+        "tags": [
+          "Event"
+        ],
+        "description": "Retry an event delivery (max. 3 retries).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {}
+  }
+}

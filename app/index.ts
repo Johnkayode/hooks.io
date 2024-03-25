@@ -1,6 +1,9 @@
-import * as express from "express";
+import express from "express";
 import { NextFunction, Request, Response, Application } from 'express';
 import { isCelebrateError } from 'celebrate';
+import swaggerUi from "swagger-ui-express";
+import swaggerOutput from "./swagger_output.json";
+
 import config from "./config";
 import connectDatabase from "./database";
 
@@ -14,6 +17,7 @@ app.use(express.json());
 
 // Routers
 app.use('/', ingestRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
 
 // // Error handling
 
