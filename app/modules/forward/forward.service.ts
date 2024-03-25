@@ -17,5 +17,12 @@ export default class ForwardService {
         let eventDeliveries = await EventDeliveryRepository.getMany(data || {});
         return eventDeliveries;
     }
+
+    static async retrieveEventDelivery(id: string): Promise<EventDelivery> {
+        const endpoint = await EventDeliveryRepository.getById(id);
+        return endpoint;
+    }
+
+    
     
 }

@@ -23,8 +23,8 @@ services:
       dockerfile: Dockerfile
       target: base
     depends_on:
-      - redis
       - postgres
+      - redis
     volumes:
       - ./app:/src/app
       - ./nodemon.json:/src/nodemon.json

@@ -9,7 +9,7 @@ const ingestRouter = Router();
 
 export { ingestRouter };
 
-
+// Source
 ingestRouter.get('/source', async (req, res, next) => {
     try {
         const sources = await IngestService.retrieveSources();
@@ -52,6 +52,7 @@ ingestRouter.get('/source/:id', async (req, res, next) => {
     }
 });
 
+// Endpoint
 ingestRouter.get('/endpoint', async (req, res, next) => {
     try {
         const endpoints = await IngestService.retrieveEndpoints();
@@ -136,6 +137,7 @@ ingestRouter.patch('/endpoint/:id', CreateUpdateEndpointValidator, async (req, r
     }
 });
 
+// Ingest
 ingestRouter.post('/ingest/:id', async (req, res, next) => {
     try {
         // verify if source exists
@@ -174,6 +176,7 @@ ingestRouter.post('/ingest/:id', async (req, res, next) => {
     }
 });
 
+// Event & Event Delivery
 ingestRouter.get('/event', async (req, res, next) => {
     try {
         let data = {};
@@ -213,6 +216,27 @@ ingestRouter.get('/event/:id/deliveries', async (req, res, next) => {
             message: 'Event deliveries retrieved',
             status_code: 200,
             data: eventDeliveries,
+        });
+    } catch (error) {
+      next(error);
+    }
+});
+
+ingestRouter.post('/event-delivery/:id/retry', async (req, res, next) => {
+    try {
+        const eventDelivery = await ForwardService.retrieveEventDelivery(req.params.id);
+
+        // add eventDelivery to queue for retrying
+        await eventQueue.add({
+            type: 'retry-event-delivery',
+            data: eventDelivery
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'EventDelivery queued for retry.',
+            status_code: 200,
+            data: null,
         });
     } catch (error) {
       next(error);
