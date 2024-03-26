@@ -47,6 +47,20 @@
           "201": {
             "description": "Created"
           }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -63,7 +77,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "source id"
           }
         ],
         "responses": {
@@ -94,6 +109,20 @@
           "201": {
             "description": "Created"
           }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -110,7 +139,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "endpoint id"
           }
         ],
         "responses": {
@@ -131,6 +161,24 @@
             "required": true,
             "schema": {
               "type": "string"
+            },
+            "description": "endpoint id"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "example": "string"
+                }
+              },
+              "required": [
+                "url"
+              ]
             }
           }
         ],
@@ -154,7 +202,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "endpoint id"
           }
         ],
         "responses": {
@@ -163,13 +212,13 @@
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
                 "properties": {
                   "sourceId": {
-                    "example": "any"
+                    "type": "string"
                   }
                 }
               }
@@ -191,7 +240,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "endpoint id"
           }
         ],
         "responses": {
@@ -200,13 +250,13 @@
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
                 "properties": {
                   "sourceId": {
-                    "example": "any"
+                    "type": "string"
                   }
                 }
               }
@@ -276,7 +326,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "event id"
           }
         ],
         "responses": {
@@ -299,7 +350,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "event id"
           }
         ],
         "responses": {
@@ -322,7 +374,8 @@
             "required": true,
             "schema": {
               "type": "string"
-            }
+            },
+            "description": "event delivery id"
           }
         ],
         "responses": {

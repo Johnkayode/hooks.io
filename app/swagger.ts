@@ -12,6 +12,8 @@ const doc = {
             description: ''
         },
     ],
+    consumes: ['application/json'],
+    produces: ['application/json'],
     components: {
         securitySchemes: {
         }
