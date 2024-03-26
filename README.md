@@ -31,7 +31,7 @@ $ docker-compose up -d
 
 ### Run database migrations
  
-To run the containers previously built, execute the following:
+To run database migrations:
  
 ```bash
 $ docker exec -it app bash
