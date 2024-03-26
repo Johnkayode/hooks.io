@@ -7,11 +7,11 @@
 Hooks.io is a simple self-hostable webhook gateway service. It serves as a wehbook management tool to route incoming webhooks to the services where they are to be consumed.
 
 ## Features
-- [x] Ingest webhook events
+- [x] Ingest webhook events.
 - [x] Forward wehbook events to subscribed endpoints.
 - [x] Manual event retries.
 - [ ] Automatic event retries.
-- [ ] Idempotency support
+- [ ] Idempotency support.
 
 ## Running the project.
 ### Build the Docker image
