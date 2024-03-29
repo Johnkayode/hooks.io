@@ -15,7 +15,7 @@ Hooks.io is a simple self-hostable webhook gateway service. It serves as a wehbo
 
 ## Documentation
 ### Source
-Sources send webhook events ingested to into the service. For example, Paystack, a payment gateway can be the source for your payments
+Sources send webhook events ingested into the service. For example, Paystack, a payment gateway can be the source for your payments
 and orders services in your e-commerce project. 
 
 ### Endpoint
