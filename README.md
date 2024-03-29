@@ -13,6 +13,23 @@ Hooks.io is a simple self-hostable webhook gateway service. It serves as a wehbo
 - [ ] Automatic event retries.
 - [ ] Idempotency support.
 
+## Documentation
+### Source
+Sources send webhook events ingested to into the service. For example, Paystack, a payment gateway can be the source for your payments
+and orders services in your e-commerce project. 
+
+### Endpoint
+An endpoint is a valid HTTP URL that can receive webhook events forwarded by Hooks.io. An endpoint should be subscribed to a source to receive events from the source.
+
+### Subscription
+Subscriptions are conduits through which events are routed from a source to an endpoint.
+
+### Event
+Event is a basically any webhook event from a source.
+
+### Event Delivery
+An event delivery is the combination of an endpoint and an event. An event can generate multiple event deliveries depending on the subscriptions. 
+
 ## Running the project.
 ### Build the Docker image
 

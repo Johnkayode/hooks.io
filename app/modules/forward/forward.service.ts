@@ -22,7 +22,5 @@ export default class ForwardService {
         const endpoint = await EventDeliveryRepository.getById(id);
         return endpoint;
     }
-
-    
     
 }
