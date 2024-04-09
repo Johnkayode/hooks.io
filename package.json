@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
     "build": "tsc -p .",
     "dev": "nodemon app/index.ts",
     "worker-dev": "nodemon app/services/worker.ts",
@@ -15,13 +16,17 @@
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
     "nodemon": "^3.0.3",
     "prisma": "^5.9.1",
+    "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "@prisma/client": "^5.9.1",
+    "@types/supertest": "^6.0.2",
     "@types/swagger-ui-express": "^4.1.6",
     "axios": "^1.6.8",
     "bull": "^4.12.2",
@@ -29,6 +34,7 @@
     "dotenv": "^16.4.4",
     "express": "^4.18.2",
     "joi": "^17.12.1",
+    "supertest": "^6.3.4",
     "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.0"
   }
