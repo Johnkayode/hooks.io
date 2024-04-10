@@ -3,7 +3,7 @@ import { Joi, celebrate } from "celebrate";
 export const CreateSourceValidator = celebrate(
     {
       body: {
-        name: Joi.string().alphanum().min(2).max(30).required()
+        name: Joi.string().min(2).max(50).required()
       }
     },
     { stripUnknown: true },

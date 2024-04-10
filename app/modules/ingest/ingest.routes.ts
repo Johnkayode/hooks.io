@@ -17,7 +17,7 @@ ingestRouter.get('/source', async (req, res, next) => {
         const sources = await IngestService.retrieveSources();
         res.status(200).json({
             success: true,
-            message: 'Sources retrieved',
+            message: 'Sources retrieved.',
             status_code: 200,
             data: sources,
         });
@@ -49,7 +49,7 @@ ingestRouter.post('/source', CreateSourceValidator, async (req, res, next) => {
         const source = await IngestService.createSource(req.body);
         res.status(201).json({
             success: true,
-            message: 'Source created',
+            message: 'Source created.',
             status_code: 201,
             data: source,
         });
@@ -69,7 +69,7 @@ ingestRouter.get('/source/:id', async (req, res, next) => {
         const source = await IngestService.retrieveSource(req.params.id);
         res.status(200).json({
             success: true,
-            message: 'Source retrieved',
+            message: 'Source retrieved.',
             status_code: 200,
             data: source,
         });
