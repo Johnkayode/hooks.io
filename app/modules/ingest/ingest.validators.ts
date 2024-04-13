@@ -1,6 +1,6 @@
 import { Joi, celebrate } from "celebrate";
 
-export const CreateSourceValidator = celebrate(
+export const CreateUpdateSourceValidator = celebrate(
     {
       body: {
         name: Joi.string().min(2).max(50).required()

@@ -20,6 +20,11 @@ export default class IngestService {
         return source;
     }
 
+    static async updateSource(id:string, data: any): Promise<Source> {
+        const source = await SourceRepository.update(id, data);
+        return source;
+    }
+
     static async createEndpoint(data: any): Promise<Endpoint> {
         const endpoint = await EndpointRepository.create(data);
         return endpoint;

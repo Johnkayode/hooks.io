@@ -1,13 +1,14 @@
 import { Router } from "express";
 import IngestService from "./ingest.service";
 import ForwardService from "../forward/forward.service";
-import { CreateSourceValidator, CreateUpdateEndpointValidator, SubscribeEndpointValidator } from "./ingest.validators";
+import { CreateUpdateSourceValidator, CreateUpdateEndpointValidator, SubscribeEndpointValidator } from "./ingest.validators";
 import { APIError } from "../../common";
 import { eventQueue } from "../../services/bull";
 
 const ingestRouter = Router();
 
 export { ingestRouter };
+
 
 // Source
 ingestRouter.get('/source', async (req, res, next) => {
@@ -26,7 +27,7 @@ ingestRouter.get('/source', async (req, res, next) => {
     }
 });
 
-ingestRouter.post('/source', CreateSourceValidator, async (req, res, next) => {
+ingestRouter.post('/source', CreateUpdateSourceValidator, async (req, res, next) => {
     /* #swagger.tags = ['Source']
        #swagger.description = 'Create new source.' 
        #swagger.requestBody = {
@@ -67,6 +68,14 @@ ingestRouter.get('/source/:id', async (req, res, next) => {
     }*/
     try {
         const source = await IngestService.retrieveSource(req.params.id);
+        if (!source) {
+            res.status(404).json({
+                success: true,
+                message: 'Source does not exist.',
+                status_code: 404,
+                data: null,
+            });
+        }
         res.status(200).json({
             success: true,
             message: 'Source retrieved.',
@@ -78,6 +87,34 @@ ingestRouter.get('/source/:id', async (req, res, next) => {
     }
 });
 
+ingestRouter.patch('/source/:id', CreateUpdateSourceValidator, async (req, res, next) => {
+    /* #swagger.tags = ['Source']
+       #swagger.description = 'Update source.' 
+       #swagger.parameters['id'] = {
+            description: 'source id',  
+        }
+       #swagger.parameters['body'] = {
+            in: 'body',
+            description: '',
+            schema: {
+                $name: 'string'
+            }
+        }
+    */
+    try {
+        const source = await IngestService.updateSource(req.params.id, req.body);
+        res.status(201).json({
+            success: true,
+            message: 'Source updated.',
+            status_code: 201,
+            data: source,
+        });
+    } catch (error) {
+      next(error);
+    }
+});
+
+
 // Endpoint
 ingestRouter.get('/endpoint', async (req, res, next) => {
     // #swagger.tags = ['Endpoint']
@@ -86,7 +123,7 @@ ingestRouter.get('/endpoint', async (req, res, next) => {
         const endpoints = await IngestService.retrieveEndpoints();
         res.status(200).json({
             success: true,
-            message: 'Endpoints retrieved',
+            message: 'Endpoints retrieved.',
             status_code: 200,
             data: endpoints,
         });
@@ -136,6 +173,14 @@ ingestRouter.get('/endpoint/:id', async (req, res, next) => {
     */
     try {
         const endpoint = await IngestService.retrieveEndpoint(req.params.id);
+        if (!endpoint) {
+            res.status(404).json({
+                success: true,
+                message: 'Endpoint does not exist.',
+                status_code: 404,
+                data: null,
+            });
+        }
         res.status(200).json({
             success: true,
             message: 'Endpoint retrieved.',
@@ -171,10 +216,19 @@ ingestRouter.post('/endpoint/:id/subscribe', SubscribeEndpointValidator, async (
       
     */
     try {
+        const source = IngestService.retrieveSource(req.body.sourceId)
+        if (!source) {
+            res.status(404).json({
+                success: true,
+                message: 'Endpoint does not exist.',
+                status_code: 404,
+                data: null,
+            });
+        }
         const subscription = await IngestService.subscribeEndpoint(req.body.sourceId, req.params.id);
         res.status(201).json({
             success: true,
-            message: 'Endpoint Subscribed.',
+            message: 'Endpoint subscribed.',
             status_code: 200,
             data: subscription,
         });

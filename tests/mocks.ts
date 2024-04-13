@@ -26,4 +26,16 @@ const EndpointsMock = [
     }
 ]
 
-export { SourceMock, SourcesMock, EndpointMock, EndpointsMock }
+const SubscriptionMock = {
+    source: {
+        "id": "source-id",
+        "name": "Source A"
+    },
+    endpoint: {
+        "id": "endpoint-id",
+        "url": "https://test.xyz"
+    }
+}
+
+
+export { SourceMock, SourcesMock, EndpointMock, EndpointsMock, SubscriptionMock }

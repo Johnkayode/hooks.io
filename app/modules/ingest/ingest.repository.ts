@@ -37,6 +37,19 @@ class SourceRepository {
     }
 
      /**
+     * Updates a source by its ID.
+     * @param id the source ID.
+     * @returns a source or null.
+     */
+     static async update(id: string, data: any): Promise<any> {
+        const source = await prisma.source.update({
+            where: { id },
+            data,
+        });
+        return source;
+    }
+
+     /**
      * Deletes a source by its ID.
      * @param id the source ID.
      * @returns
