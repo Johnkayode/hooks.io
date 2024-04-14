@@ -37,5 +37,52 @@ const SubscriptionMock = {
     }
 }
 
+const EventMock = {
+    id: "ID",
+    sourceId: "",
+    payload: {},
+    headers: {}
+}
 
-export { SourceMock, SourcesMock, EndpointMock, EndpointsMock, SubscriptionMock }
+const EventsMock = [
+    {
+        id: "ID",
+        sourceId: "source-id-1",
+        payload: {},
+        headers: {}
+    },
+     {
+        id: "ID",
+        sourceId: "source-id-2",
+        payload: {},
+        headers: {}
+    }
+]
+
+const EventDeliveryMock = {
+    id: "ID",
+    eventId: "event-id",
+    endpointId: "endpoint-id",
+    retry_count: 0,
+    status: "PROCESSING"
+}
+
+const EventDeliveriesMock = [
+    {
+        id: "ID-1",
+        eventId: "event-id-1",
+        endpointId: "endpoint-id-1",
+        retry_count: 0,
+        status: "PROCESSING"
+    },
+    {
+        id: "ID-2",
+        eventId: "event-id-2",
+        endpointId: "endpoint-id-2",
+        retry_count: 1,
+        status: "SUCCESSFUL"
+    }
+]
+
+
+export { SourceMock, SourcesMock, EndpointMock, EndpointsMock, SubscriptionMock, EventMock, EventsMock, EventDeliveryMock, EventDeliveriesMock }
