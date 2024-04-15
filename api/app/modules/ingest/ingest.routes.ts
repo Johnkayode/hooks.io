@@ -69,7 +69,7 @@ ingestRouter.get('/source/:id', async (req, res, next) => {
     try {
         const source = await IngestService.retrieveSource(req.params.id);
         if (!source) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: true,
                 message: 'Source does not exist.',
                 status_code: 404,
@@ -174,7 +174,7 @@ ingestRouter.get('/endpoint/:id', async (req, res, next) => {
     try {
         const endpoint = await IngestService.retrieveEndpoint(req.params.id);
         if (!endpoint) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: true,
                 message: 'Endpoint does not exist.',
                 status_code: 404,
@@ -218,9 +218,9 @@ ingestRouter.post('/endpoint/:id/subscribe', SubscribeEndpointValidator, async (
     try {
         const source = IngestService.retrieveSource(req.body.sourceId)
         if (!source) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: true,
-                message: 'Endpoint does not exist.',
+                message: 'Source does not exist.',
                 status_code: 404,
                 data: null,
             });
@@ -260,6 +260,15 @@ ingestRouter.post('/endpoint/:id/unsubscribe', SubscribeEndpointValidator, async
         } 
     */
     try {
+        const source = IngestService.retrieveSource(req.body.sourceId)
+        if (!source) {
+            return res.status(404).json({
+                success: true,
+                message: 'Source does not exist.',
+                status_code: 404,
+                data: null,
+            });
+        }
         await IngestService.unsubscribeEndpoint(req.body.sourceId, req.params.id);
         res.status(201).json({
             success: true,

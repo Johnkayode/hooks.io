@@ -19,32 +19,34 @@ services:
   app:
     restart: on-failure
     build:
-      context: .
+      context: ./api
       dockerfile: Dockerfile
       target: base
     depends_on:
       - postgres
       - redis
     volumes:
-      - ./app:/src/app
-      - ./nodemon.json:/src/nodemon.json
+      - ./api/app:/src/api/app
+      - ./api/nodemon.json:/src/api/nodemon.json
+      - ./.env:/src/api/.env
     container_name: app
     expose:
-      - '${APP_PORT:-5000}'
+      - 5000
     ports:
-      - '${APP_PORT:-5000}:${APP_PORT:-5000}'
+      - '5000:5000'
     command: npm run dev
   worker:
     build:
-      context: .
+      context: ./api
       dockerfile: Dockerfile
       target: base
     depends_on:
       - redis
       - postgres
     volumes:
-      - ./app:/src/app
-      - ./nodemon.json:/src/nodemon.json
+      - ./api/app:/src/api/app
+      - ./api/nodemon.json:/src/api/nodemon.json
+      - ./.env:/src/api/.env
     container_name: worker-1
     command: npm run worker-dev
     restart: on-failure

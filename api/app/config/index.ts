@@ -12,4 +12,4 @@ export default {
     PORT: process.env.APP_PORT || 5000,
     redisURL: process.env.REDIS_URL || 'redis://:@localhost:6379',
 };
-  
+ 

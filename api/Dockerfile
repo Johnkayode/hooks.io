@@ -1,6 +1,6 @@
 FROM node:18 as base
 
-WORKDIR /src
+WORKDIR /src/api
 
 COPY package*.json ./
 
